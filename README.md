@@ -70,7 +70,7 @@ def read_message(encoded_message):
     read_lines method, where the essage is decoded
     :param: the 2d messgae array that holds the decoded message
     :return: the completed, decoded message stored in an array
-    :author: Joe Casper
+    :author: Joe Casper and Lauren Lee 
     """
 
 
@@ -79,7 +79,7 @@ def read_line(encoded_message):
     Reads a line, byte by byte, until a newline character is found. Each byte is decoded as
     the line is iterated through.
     :param: the message being decoded
-    :author: Joe Casper
+    :author: Joe Casper and Lauren Lee
     """
 
 
@@ -87,7 +87,10 @@ def save_to_file(message):
     """
     Saves the newly decoded message in a file
     :param the decoded message
-    :author: Joe Casper
+    :author: Joe Casper and Lauren Lee
     """
+  
+    
+    
 
 >> >> >> > master
