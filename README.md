@@ -93,8 +93,8 @@ def save_to_file(message):
     :param the decoded message
     :author: Joe Casper and Lauren Lee
     """
-  
-    
+ 
+ ##there are a lot of errors   
     
 
 >> >> >> > master
