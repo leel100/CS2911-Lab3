@@ -94,7 +94,6 @@ def save_to_file(message):
     :author: Joe Casper and Lauren Lee
     """
  
- ##there are a lot of errors   
-    
+ ##there are a lot of errors so let me know if you can see the changes 
 
 >> >> >> > master
