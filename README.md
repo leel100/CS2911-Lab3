@@ -1,5 +1,5 @@
 
-def next_byte_socket_factory():
+def next_byte_socket_factory(encoded_msg):
     """
     Enter the byte in hexadecimal shorthand
     e.g.
@@ -9,15 +9,7 @@ def next_byte_socket_factory():
     :author: Dr. Yoder
     """
 
-    msg = (b'\x00\x00\x00\x04\x4c\x61\x62\x20'
-           b'\x31\x0a\x50\x68\x69\x6c\x65\x61'
-           b'\x73\x20\x46\x6f\x67\x67\x0a\x0a'
-           b'\x54\x68\x69\x73\x20\x69\x73\x20'
-           b'\x6d\x79\x20\x6c\x61\x62\x20\x31'
-           b'\x20\x61\x73\x73\x69\x67\x6e\x6d'
-           b'\x65\x6e\x74\x2e\x0a')
-
-    for b in msg:
+    for b in encoded_msg:
         yield bytes((b,))  # b holds the contents of the byte as an int.
         # This converts it back to a bytes object
         # of a single byte.
@@ -25,34 +17,26 @@ def next_byte_socket_factory():
 
 def next_byte(data_socket):
     return next(data_socket)
-    ## the line of code is from his webiste but I do not know where it goes yet 
-    
-encoded_message = b'\x00\x00\x00\x01\x48\x65\x6c\x6c\x6f\x0a'
-
-#trying to write bytes to a file
-with open ("text.txt, 'rb') as binary_file:
-binary_file_write('') ##not sure what goes in 
-num_bytes_written = binary_file()
-
-#Reading file line by line
-with open('text.txt, 'rb') as text_files:
-for line in text_file:
-print(line) 
 
 
+def get_message_length():
     """
     This method reads the first 4 bytes of the encoded message and saves it as the message length
     :param the encoded message
     :return: the number of lines in the message
-    :author: Joe Casper and Lauren Lee
-   """
-with open(path_to_file, 'rb') as binary_byte:
-    binary_byte.read()[:4]
+    :author: Joe Casper
+    """
+    length = b''
 
-number_of_lines = get_message_length(encoded_message)
+    # reads the first 4 bytes of the message and appends it to a bytes object
+    for counter in range(0,4):
+        length += next_byte(data_socket)
+
+    # converts the bytes object to an int, returns the result
+    return int.from_bytes(length,"big")
 
 
-def create_message_array():
+def create_message_array(size):
     """
     This method creates a two dimensional array that stores the message.
     The number of arrays in the message array equals the number of lines in the encoded message
@@ -60,40 +44,75 @@ def create_message_array():
     :author: Joe Casper
     """
 
+    array = []
 
-messgae = create_message_array()
+    # for each line long the message is, add one index of arrays to array
+    for x in range (0, size):
+        array.append([])
+
+    return array
 
 
-def read_message(encoded_message):
+def read_message(size, array):
     """
     Holds a loop that reads the encoded message line by line. This method redirects to the
-    read_lines method, where the essage is decoded
-    :param: the 2d messgae array that holds the decoded message
+    read_lines method, where the message is decoded
     :return: the completed, decoded message stored in an array
-    :author: Joe Casper and Lauren Lee 
+    :author: Joe Casper
     """
+    # Run this line of code for every '/n' in the encoded message
+    for counter in range(0, size):
+        read_line(array, counter)
+
+    return array
 
 
-def read_line(encoded_message):
+def read_line(array, index):
     """
     Reads a line, byte by byte, until a newline character is found. Each byte is decoded as
     the line is iterated through.
-    :param: the message being decoded
-    :author: Joe Casper and Lauren Lee
+    :author: Joe Casper
     """
-new_line = open("myFile, 'rb')
-try:
-byte = new_line.read(1)
-while byte != "":
-byte = new_line.read(1)
+    # continue_parsing is marked as false when next_byte returns a newline character
+    continue_parsing = True
+    while continue_parsing:
+        byte = b''
+        # append the next byte in the message to a blank bytes object
+        byte += next_byte(data_socket)
 
-def save_to_file(message):
+        # At the current index, decode the bytes object and append it
+        array[index].append(byte.decode("ASCII"))
+
+        # if next_byte returned a newline character, break the loop and return to read_message
+        if byte == b'\x0a':
+            continue_parsing = False
+
+
+# TODO
+def save_to_file(decoded_msg):
     """
     Saves the newly decoded message in a file
-    :param the decoded message
-    :author: Joe Casper and Lauren Lee
+    :param decoded_msg the decoded message
+    :author: Joe Casper
     """
- 
- ##there are a lot of errors so let me know if you can see the changes 
 
->> >> >> > master
+# TODO read from file instead of hard code
+encoded_msg = (b'\x00\x00\x00\x04\x4c\x61\x62\x20'
+           b'\x31\x0a\x50\x68\x69\x6c\x65\x61'
+           b'\x73\x20\x46\x6f\x67\x67\x0a\x0a'
+           b'\x54\x68\x69\x73\x20\x69\x73\x20'
+           b'\x6d\x79\x20\x6c\x61\x62\x20\x31'
+           b'\x20\x61\x73\x73\x69\x67\x6e\x6d'
+           b'\x65\x6e\x74\x2e\x0a')
+
+# Create the generator
+data_socket = next_byte_socket_factory(encoded_msg)
+
+# get the message length
+msg_length = get_message_length()
+
+# create the blank array
+blank_array = create_message_array(msg_length)
+
+# read through the encoded message, store the decoded values in an array
+decoded_msg = read_message(msg_length, blank_array)
