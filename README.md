@@ -81,7 +81,11 @@ def read_line(encoded_message):
     :param: the message being decoded
     :author: Joe Casper and Lauren Lee
     """
-
+new_line = open("myFile, 'rb')
+try:
+byte = new_line.read(1)
+while byte != "":
+byte = new_line.read(1)
 
 def save_to_file(message):
     """
