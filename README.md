@@ -24,13 +24,14 @@ def get_message_length():
     This method reads the first 4 bytes of the encoded message and saves it as the message length
     :param the encoded message
     :return: the number of lines in the message
-    :author: Joe Casper
+    :author: Joe Casper and Lauren Lee
     """
     length = b''
 
     # reads the first 4 bytes of the message and appends it to a bytes object
     for counter in range(0,4):
         length += next_byte(data_socket)
+
 
     # converts the bytes object to an int, returns the result
     return int.from_bytes(length,"big")
@@ -93,10 +94,20 @@ def save_to_file(decoded_msg):
     """
     Saves the newly decoded message in a file
     :param decoded_msg the decoded message
-    :author: Joe Casper
+    :author: Lauren Lee
     """
+    with open('File', 'wb') as output_file:
+        #saves data that sends to the file
+        #output_file.write(b'Message is: ' + decoded_msg)
+        for decode in decoded_msg:
+            for decode1 in decode:
+                output_file.write(decode1.encode())
+                print(decode1)
 
-# TODO read from file instead of hard code
+
+
+
+
 encoded_msg = (b'\x00\x00\x00\x04\x4c\x61\x62\x20'
            b'\x31\x0a\x50\x68\x69\x6c\x65\x61'
            b'\x73\x20\x46\x6f\x67\x67\x0a\x0a'
@@ -116,3 +127,9 @@ blank_array = create_message_array(msg_length)
 
 # read through the encoded message, store the decoded values in an array
 decoded_msg = read_message(msg_length, blank_array)
+
+#print(decoded_msg)
+save_to_file(decoded_msg)
+
+
+
